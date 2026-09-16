@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>EV Planner</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #1e293b;
+            color: white;
+            text-align: center;
+        }
+
+        form {
+            background: #0f172a;
+            padding: 30px;
+            margin: 50px auto;
+            width: 400px;
+            border-radius: 10px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px;
+            width: 100%;
+            background: green;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Smart EV Planner</h2>
+
+    <form action="/predict" method="post">
+
+        <select name="car" id="carSelect" onchange="updateDetails()">
+            {% for car in cars %}
+            <option value="{{car.car_name}}" data-battery="{{car.battery_capacity_kWh}}"
+                data-efficiency="{{car.efficiency_wh_per_km}}">
+                {{car.car_name}}
+            </option>
+            {% endfor %}
+        </select>
+
+        <p id="carDetails"></p>
+
+        <input type="number" name="soc" placeholder="SOC (%)" required>
+        <input type="number" name="speed" placeholder="Speed (km/h)" required>
+        <input type="number" name="distance" placeholder="Distance (km)" required>
+
+        <input type="hidden" name="latitude" id="lat">
+        <input type="hidden" name="longitude" id="lon">
+
+        <button type="submit">Optimize Route</button>
+
+    </form>
+
+    <script>
+        function updateDetails() {
+            let select = document.getElementById("carSelect");
+            let selected = select.options[select.selectedIndex];
+
+            let battery = selected.getAttribute("data-battery");
+            let efficiency = selected.getAttribute("data-efficiency");
+
+            document.getElementById("carDetails").innerHTML =
+                "Battery Capacity: " + battery + " kWh | Efficiency: " + efficiency + " Wh/km";
+        }
+
+        window.onload = updateDetails;
+
+        navigator.geolocation.getCurrentPosition(function (pos) {
+            document.getElementById("lat").value = pos.coords.latitude;
+            document.getElementById("lon").value = pos.coords.longitude;
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Result</title>
+</head>
+
+<body>
+
+    <h2>Predicted Range: {{range}} km</h2>
+
+    {% if reachable %}
+    <p>You can reach destination</p>
+    {% else %}
+    <p>Destination not reachable</p>
+    {% endif %}
+
+    <h3>Stations</h3>
+
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Distance</th>
+            <th>Free</th>
+            <th>Occupied</th>
+            <th>Time</th>
+        </tr>
+
+        {% for s in stations %}
+        <tr>
+            <td>{{s.name}}</td>
+            <td>{{s.distance}}</td>
+            <td>{{s.free}}</td>
+            <td>{{s.occupied}}</td>
+            <td>{{s.time}}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    <h3>Map</h3>
+
+    {{ map_html | safe }}
+
+    <br><br>
+    <a href="/">Go Back</a>
+
+</body>
+
+</html>
